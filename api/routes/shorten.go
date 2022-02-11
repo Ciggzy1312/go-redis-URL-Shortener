@@ -9,8 +9,9 @@ import (
 	"github.com/Ciggzy1312/url-shortener/helpers"
 	"github.com/go-redis/redis/v8"
 
-	"github.com/gofiber/fiber"
-	"github.com/gofiber/fiber/v2/internal/uuid"
+	"github.com/asaskevich/govalidator"
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
 type request struct {
@@ -32,6 +33,12 @@ func shortenURL(c *fiber.Ctx) error {
 
 	if err := c.BodyParser(&body); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"err": "cannot parse JSON"})
+	}
+
+	// check input is actual URL
+
+	if !govalidator.IsURL(body.URL) {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"err": "Invalid URL"})
 	}
 
 	// check domain error
