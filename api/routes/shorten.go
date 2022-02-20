@@ -28,7 +28,7 @@ type response struct {
 	XRateLimitReset time.Duration `json:"rate_limit_reset"`
 }
 
-func shortenURL(c *fiber.Ctx) error {
+func ShortenURL(c *fiber.Ctx) error {
 	body := new(request)
 
 	if err := c.BodyParser(&body); err != nil {
